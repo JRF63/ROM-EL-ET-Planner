@@ -3,47 +3,47 @@
 71003: Vocal
 71004: Ghosting
 71005: Toad
-71006: Rotar
-71007: Dragon
-71008: Vagabond
+71006: Rotar Zairo
+71007: Dragon Fly
+71008: Vagabond Wolf
 71009: Gryphon
-71010: Orc
+71010: Orc Baby
 71011: Jakk
-71012: Mutant
-71013: Owl
+71012: Mutant Dragon
+71013: Owl Duke
 71014: Mysteltainn
 71015: Alice
 71016: Zherlthsh
 71017: Mastering
 71018: Anubis
 71019: Hyegun
-71020: Dark
+71020: Dark Illusion
 71023: Rafflesia
 71024: Clock
-71025: Clock
+71025: Clock Tower Manager
 71026: Chepet
 72001: Angeling
-72002: Golden
+72002: Golden Thief Bug
 72003: Deviling
 72004: Drake
 72005: Strouf
-72006: Goblin
+72006: Goblin Leader
 72007: Mistress
 72008: Maya
 72009: Phreeoni
-72010: Wood
+72010: Wood Goblin
 72011: Eddga
 72012: Osiris
-72013: Moonlight
-72014: Orc
+72013: Moonlight Flower
+72014: Orc Hero
 72015: Doppelganger
-72016: Orc
+72016: Orc Lord
 72017: Detarderous
-72018: Owl
-72020: Bloody
+72018: Owl Baron
+72020: Bloody Knight
 72021: Baphomet
 72023: Atroce
-72024: Kobold
-72025: Dark
-72028: Time
+72024: Kobold Leader
+72025: Dark Lord
+72028: Time Holder
 72029: Spashire
