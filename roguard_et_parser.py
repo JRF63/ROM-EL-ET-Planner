@@ -5,18 +5,10 @@ import time
 import urllib.request
 from bs4 import BeautifulSoup
 
-# Time in minutes to update
-UPD_MINUTES = 600
-
 # ROGuard Endless Tower URL
 URL = 'http://www.roguard.net/game/endless-tower/'
-
-#-------------------------------------------------------------------
-
-UPD_SEC = UPD_MINUTES * 60
 CACHE_FNAME = 'ET_dump.pickle'
 IDMAP_FNAME = 'roguard_mon_id.txt'
-
 
 def parse_monster_id_map():
     id_map = {}
@@ -107,11 +99,12 @@ def parse_table(table):
             
     return contents
 
-def check_cache():
+def check_cache(update_time):
     # get new data if cached one is older than desired
     # update time; create a cache if necessary
+    # @update_time - time in hours to update
     if not os.path.isfile(CACHE_FNAME) or \
-        time.time() - os.path.getmtime(CACHE_FNAME) > UPD_SEC:
+        time.time() - os.path.getmtime(CACHE_FNAME) > update_time * 3600:
 
         with urllib.request.urlopen(URL) as response:
             webpage = response.read()
@@ -122,13 +115,11 @@ def check_cache():
                 pickle.dump(et_data, f)
                 print('---UPDATED ENDLESS TOWER DATA---\n')
 
-
-def read_et_list(targets):
-    check_cache()
-
+def get_et_data(update_time=1):
+    check_cache(update_time)
     with open(CACHE_FNAME, 'rb') as f:
         et_data = pickle.load(f)
+        return et_data
 
 
-read_et_list([])
     
