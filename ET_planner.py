@@ -154,6 +154,8 @@ def build_matrices(allowed_channels, floors, channels):
 	return score_matrix, backtrack_matrix
 
 def plan_channels2(scored_data):
+	# implments dynamic programming to find the
+	# path with least number of channel hops
 
 	allowed_channels = filter_channels(scored_data)
 	floors = sorted(scored_data)
@@ -167,22 +169,54 @@ def plan_channels2(scored_data):
 
 	return min_hops, traversed_channels
 
+def input_parser(fname='target_monsters.txt'):
+	is_valid = roguard_et_parser.get_monster_name_validator()
+
+	targets = []
+	with open(fname) as f:
+		# discard first line
+		f.readline()
+
+		group = set()
+		for line in f:
+			if not line.startswith('\n'):
+				if line.startswith('#'):
+					targets.append(group)
+					group = set()
+					continue
+
+				name = line.strip()
+				if not is_valid(name):
+					print('%s is not a valid monster name.' % name)
+					exit(1)
+				group.add(name)
+
+		targets.append(group)
+
+	return targets
+
+def display_output(et_data, min_hops, traversed_channels):
+	floors = sorted(et_data)
+	sep = '-' * 60
+
+	print('\nMinimum change channels:', min_hops)
+	print('\nFloor | Channel | Monsters')
+	print(sep)
+
+	for floor, channel in zip(floors, traversed_channels):
+		monsters = ', '.join(et_data[floor][channel])
+		print('{0:>5} | {1:^7} | {2}'.format(floor, channel, monsters))
+		print(sep)
+
 def main():
 	et_data = roguard_et_parser.get_et_data()
-
-	mvp_targets = {'Deviling', 'Mistress', 'Osiris'}
-	avoid_mvp = {'Kobold Leader', 'Baphomet', 'Dark Lord', 'Time Holder', 'Owl Baron', 'Spashire'}
-
-	mini_targets = {'Eclipse'}
-	extra_mini = {'Rotar Zairo'}
-
+	mvp_targets, avoid_mvp, mini_targets, extra_mini = input_parser()
+	
 	scored_data = et_scorer(et_data, mvp_targets, avoid_mvp,
 							mini_targets, extra_mini)
 
 	min_hops, traversed_channels = plan_channels2(scored_data)
 
-	print('Minimum change channels:', min_hops)
-	print('\nPath:')
-	print(traversed_channels)
+	display_output(et_data, min_hops, traversed_channels)
 	
 main()

@@ -18,6 +18,18 @@ def parse_monster_id_map():
             id_map[int(num)] = monster
     return id_map
 
+def get_monster_name_validator():
+    monster_names = set()
+    with open(IDMAP_FNAME) as file:
+        for line in file:
+            _, monster = line.strip().split(': ')
+            monster_names.add(monster)
+
+    def validator(name):
+        return name in monster_names
+
+    return validator
+
 def monster_id_utility(soup):
     # Prints out monster ID to monster name mapping
     id_map = {}
