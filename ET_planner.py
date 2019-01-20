@@ -2,26 +2,26 @@ import roguard_et_parser
 
 MAX_HOPS = 100
 
-def et_scorer(et_data, mvp_targets, avoid_mvp,
-			  mini_targets, extra_mini):
+def et_scorer(et_data, main_targets, sec_targets, avoids):
+
+	score_main = 10
+	score_sec = 1
+	penalty = 100
+
 	scored_data = {}
 	for floor, mobs_dict in et_data.items():
 		is_mvp_floor = (floor % 10 == 0)
 		
 		for channel, mobs in mobs_dict.items():
 			score = 0
-			if is_mvp_floor:
-				for mob in mobs:
-					if mob in mvp_targets:
-						score += 10
-					elif mob in avoid_mvp:
-						score -= 10
-			else:
-				for mob in mobs:
-					if mob in mini_targets:
-						score += 10
-					elif mob in extra_mini:
-						score += 1
+			for mob in mobs:
+				if mob in main_targets:
+					score += score_main
+				elif mob in sec_targets:
+					score += score_sec
+				elif mob in avoids:
+					score -= penalty
+
 			if floor not in scored_data:
 				scored_data[floor] = {}
 			scored_data[floor][channel] = score
@@ -29,10 +29,11 @@ def et_scorer(et_data, mvp_targets, avoid_mvp,
 	return scored_data
 
 def filter_channels(scored_data):
+	min_score = -1000
 	allowed_channels = {}
 
 	for floor, channel_dict in scored_data.items():
-		best_score = -MAX_HOPS
+		best_score = min_score
 		best_channels = []
 		for channel, score in channel_dict.items():
 			if score > best_score:
@@ -115,11 +116,13 @@ def backtrack_path(backtrack_matrix, floors, last_channel):
 
 def build_matrices(allowed_channels, floors, channels):
 
+	dummy_chan = -1
+
 	score_matrix = build_score_matrix(allowed_channels)
 
 	backtrack_matrix = {}
 	for floor in allowed_channels[floors[0]]:
-		backtrack_matrix[floor] = {chan: -1 for chan in channels}
+		backtrack_matrix[floor] = {chan: dummy_chan for chan in channels}
 
 	prev_floor = floors[0]
 	for curr_floor in floors[1:]:
@@ -129,7 +132,7 @@ def build_matrices(allowed_channels, floors, channels):
 		
 		for channel in curr_column:
 			least_hops = MAX_HOPS
-			best_prev_chan = -1
+			best_prev_chan = dummy_chan
 			for prev_channel, prev_score in prev_column.items():
 
 				total = prev_score
@@ -210,10 +213,9 @@ def display_output(et_data, min_hops, traversed_channels):
 
 def main():
 	et_data = roguard_et_parser.get_et_data()
-	mvp_targets, avoid_mvp, mini_targets, extra_mini = input_parser()
+	main_targets, sec_targets, avoids = input_parser()
 	
-	scored_data = et_scorer(et_data, mvp_targets, avoid_mvp,
-							mini_targets, extra_mini)
+	scored_data = et_scorer(et_data, main_targets, sec_targets, avoids)
 
 	min_hops, traversed_channels = plan_channels2(scored_data)
 
