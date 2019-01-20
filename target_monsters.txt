@@ -1,0 +1,17 @@
+#MAIN_TARGETS
+Deviling
+Mistress
+Osiris
+Eclipse
+
+#SECONDARY_TARGETS
+Rotar Zairo
+
+#AVOID
+Kobold Leader
+Baphomet
+Dark Lord
+Time Holder
+Owl Baron
+Spashire
+Gryphon
