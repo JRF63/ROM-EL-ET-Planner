@@ -121,7 +121,8 @@ def build_matrices(allowed_channels, floors, channels):
 	score_matrix = build_score_matrix(allowed_channels)
 
 	backtrack_matrix = {}
-	backtrack_matrix[floors[0]] = {chan: dummy_chan for chan in channels}
+	backtrack_matrix[floors[0]] = {chan: dummy_chan for chan in
+									allowed_channels[floors[0]]}
 
 	prev_floor = floors[0]
 	for curr_floor in floors[1:]:
